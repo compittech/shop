@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Connection;
+use Illuminate\Database\Events\QueryExecuted;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +27,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Model::preventLazyLoading(!app()->isProduction());
+        model::preventSilentlyDiscardingAttributes(!app()->isProduction());
+
+        DB::whenQueryingForLongerThan(500, function (Connection $connection, QueryExecuted $event) {
+            // TODO 3rd lesson
+        });
+        // TODO 3rd lesson request cycle
     }
 }
