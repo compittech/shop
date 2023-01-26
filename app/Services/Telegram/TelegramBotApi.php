@@ -4,24 +4,31 @@
 namespace App\Services\Telegram;
 
 
+use App\Exceptions\Telegram\SendMessageException;
 use Illuminate\Support\Facades\Http;
 
 class TelegramBotApi
 {
     public const HOST = 'https://api.telegram.org/bot';
 
-    public static function sendMessage(string $token, string $chat_id, string $text) :void
+    //getUpdates чтобы получить chat_id
+
+    public static function sendMessage(string $token, string $chat_id, string $text) :bool
     {
-        Http::get(self::HOST . $token . '/sendMessage', [
+        $response = Http::get(self::HOST . $token . '/sendMessage', [
             'chat_id' => $chat_id,
             'text' => $text
         ]);
-        //TODO ДЗ Урок 1
-        /*
-         * В этом методе получать json ответ и возвращать boolean
-         * Добавить try catch и свой exeption
-         * В случае неудачи отправки в телегу возращать свой exception
-         * */
+        if (!$response->json(['ok'])) {
+            throw new SendMessageException($response->json(['description']), $response->json(['error_code']));
+        }
+        return $response->json(['ok']);
     }
 
+    //TODO ДЗ Урок 1
+    /*
+     * В этом методе получать json ответ и возвращать boolean - OK
+     * Добавить try catch и свой exception
+     * В случае неудачи отправки в телегу возращать свой exception
+     * */
 }

@@ -4,6 +4,7 @@
 namespace App\Logging\Telegram;
 
 
+use App\Exceptions\Telegram\SendMessageException;
 use App\Services\Telegram\TelegramBotApi;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -23,10 +24,15 @@ class TelegramLoggerHandler extends AbstractProcessingHandler
 
     protected function write(array $record): void
     {
-        TelegramBotApi::sendMessage(
-            $this->token,
-            $this->chat_id,
-            $record['formatted']
-        );
+        try {
+            $result = TelegramBotApi::sendMessage(
+                $this->token,
+                $this->chat_id,
+                $record['formatted']
+            );
+        } catch (SendMessageException $e) {
+            logger('Поймали исключение: '.$e->getMessage().' | code = '. $e->getCode());
+            //todo заменить лог на мейл адммину
+        }
     }
 }
