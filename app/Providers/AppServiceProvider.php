@@ -24,11 +24,10 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        Model::shouldBeStrict();
-        $kernel = app(Kernel::class);
-        $kernel->whenRequestLifecycleIsLongerThan(
+        Model::shouldBeStrict(app()->isLocal());
+        app(Kernel::class)->whenRequestLifecycleIsLongerThan(
             CarbonInterval::milliseconds(5000),
             function () {
                 logger()->channel('telegram')->debug('whenRequestLifecycleIsLongerThan: ' . request()->url());
