@@ -13,6 +13,7 @@ class SendMessageException extends Exception
      */
     public function report() :bool|null
     {
-        return false;
+        logger('отправка в телегу не сложилась');
+        return true;
     }
 }

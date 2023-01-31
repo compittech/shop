@@ -24,11 +24,4 @@ class TelegramBotApi
         }
         return $response->json(['ok']);
     }
-
-    //TODO ДЗ Урок 1
-    /*
-     * В этом методе получать json ответ и возвращать boolean - OK
-     * Добавить try catch и свой exception
-     * В случае неудачи отправки в телегу возращать свой exception
-     * */
 }

@@ -5,10 +5,7 @@ namespace App\Providers;
 use Illuminate\Contracts\Http\Kernel;
 use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Connection;
-use Illuminate\Database\Events\QueryExecuted;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,12 +26,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Model::preventLazyLoading(!app()->isProduction());
-        Model::preventSilentlyDiscardingAttributes(!app()->isProduction());
+        Model::shouldBeStrict();
         $kernel = app(Kernel::class);
-        DB::whenQueryingForLongerThan(500, function (Connection $connection, QueryExecuted $event) {
-            logger()->channel('telegram')->debug('whenQueryingForLongerThan: ' . $connection->query()->toSql());
-        });
         $kernel->whenRequestLifecycleIsLongerThan(
             CarbonInterval::milliseconds(5000),
             function () {
