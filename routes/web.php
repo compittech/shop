@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,5 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+//    dd(\Illuminate\Support\Facades\Storage::deleteDirectory('test'));
+    //todo ДЗ Урок 2.3 сделать коммит по 2 уроке и смержить в мастер
     return view('welcome');
 });
