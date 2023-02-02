@@ -23,7 +23,6 @@ class Category extends Model
         'slug'
     ];
 
-
     public function products(): BelongsToMany
 
     {
