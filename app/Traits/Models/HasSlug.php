@@ -4,6 +4,7 @@
 namespace App\Traits\Models;
 
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 trait HasSlug
@@ -11,9 +12,9 @@ trait HasSlug
 
     protected static function bootHasSlug()
     {
-        static::creating(function ($model) {
+        static::creating(function (Model $model) {
             if (empty($model->slug)) {
-                $model->slug = $model->unique_slug($model);
+                $model->slug = self::unique_slug($model);
             }
         });
     }
@@ -38,7 +39,13 @@ trait HasSlug
                 $counter[] = (int)$end;
             }
         }
-        $end = max($counter) == 0 ? 1 : max($counter) + 1;
-        return $slug->append('-' . $end);
+        if ($models->isEmpty()) {
+            $append = '';
+        } elseif($models->isNotEmpty() AND max($counter) == 0) {
+            $append = '-2';
+        } else {
+            $append = '-'.(max($counter) + 1);
+        }
+        return $slug->append($append);
     }
 }
