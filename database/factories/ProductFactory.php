@@ -20,7 +20,7 @@ class ProductFactory extends Factory
         return [
             'title'=>ucfirst($this->faker->words(2, true)),
             'brand_id'=>Brand::query()->inRandomOrder()->value('id'),
-            'thumbnail'=>'', //todo ДЗ Урок 2.2 на 25 минуте
+            'thumbnail'=>$this->faker->lorem_flickr('images/products'),
             'price'=>$this->faker->numberBetween(100, 10000)
         ];
     }
